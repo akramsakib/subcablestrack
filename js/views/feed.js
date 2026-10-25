@@ -1,4 +1,4 @@
-/* Live intelligence feed.
+/* Cable watch feed.
    Aggregates submarine-cable trade press, networking/infrastructure news and
    general tech outlets, scored for cable relevance server-side (or at build
    time for the static snapshot). The curated incident record is always
@@ -117,8 +117,8 @@ function statusLine() {
 
 function shell(inner) {
   return `<div class="v-head">
-      <div class="v-title">Live intelligence feed</div>
-      <div class="v-sub">Submarine-cable trade press, networking outlets and general tech/security reporting, scored for cable relevance. The curated incident record is always included.</div>
+      <div class="v-title">Cable watch</div>
+      <div class="v-sub">Submarine-cable trade press, networking outlets and general tech/security reporting, monitored for cable relevance. The curated incident record is always included.</div>
     </div>${inner}`;
 }
 

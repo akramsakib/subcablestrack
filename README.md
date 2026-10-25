@@ -1,10 +1,11 @@
 # SubCableTrack
 
-**Global submarine cable intelligence console.** A curated, fully-cited registry of
-25 major submarine cable systems, a documented incident record going back to 2006,
-chokepoint risk analysis, a live infrastructure-news feed, a point-to-point route
-lookup, and a cable relationship graph — built in the same design language as
-[ThreatNexus BD](https://akramsakib.github.io/bangladesh-threat-intelligence/).
+**A monitoring console for global submarine cable routes.** A curated, fully-cited
+registry of 25 major submarine cable systems, a documented incident record going
+back to 2006, chokepoint risk analysis, a live infrastructure-news feed, a
+point-to-point route lookup, and a cable relationship graph — in its own
+chart-room visual language (ocean-teal/brass palette, serif mastheads, nautical
+iconography), not a reskin of a security dashboard.
 
 Live: https://akramsakib.github.io/subcablestrack/
 
@@ -45,5 +46,5 @@ npm run build         # node tools/build.mjs — static dist/ for GitHub Pages
 
 ## License
 
-CC BY 4.0 for the intelligence content (`data/`), MIT for the application code.
+CC BY 4.0 for the data content (`data/`), MIT for the application code.
 See [LICENSE](LICENSE).

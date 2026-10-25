@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#060b12">
-<title>SubCableTrack — Global Submarine Cable Intelligence</title>
-<meta name="description" content="A global submarine cable intelligence console. 25+ cited cable dossiers, a documented incident record from 2006, chokepoint risk analysis, a live infrastructure-news feed, a route lookup and a cable relationship graph. Free, no login. Not a reproduction of TeleGeography's proprietary map data.">
+<meta name="theme-color" content="#071a1f">
+<title>SubCableTrack — Global Submarine Cable Monitor</title>
+<meta name="description" content="A global monitoring console for submarine cable routes and infrastructure. 25+ cited cable dossiers, a documented incident record from 2006, chokepoint risk analysis, a live infrastructure-news feed, a route lookup and a cable relationship graph. Free, no login. Not a reproduction of TeleGeography's proprietary map data.">
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/views.css">
 <script type="importmap">
@@ -16,8 +16,8 @@
 <link rel="modulepreload" href="js/globe.js">
 
 <meta property="og:type" content="website">
-<meta property="og:title" content="SubCableTrack — Global Submarine Cable Intelligence">
-<meta property="og:description" content="25+ cited cable dossiers, a documented incident record from 2006, chokepoint risk analysis, a live infrastructure feed, a route lookup and a cable relationship graph. Free, no login.">
+<meta property="og:title" content="SubCableTrack — Global Submarine Cable Monitor">
+<meta property="og:description" content="Watch where the world's internet infrastructure physically runs: 25+ cited cable dossiers, a documented incident record from 2006, chokepoint risk analysis, a live infrastructure feed and a route lookup. Free, no login.">
 <meta name="robots" content="index, follow">
 
 <script type="application/ld+json">
@@ -28,8 +28,8 @@
       "@type": "WebSite",
       "@id": "#site",
       "name": "SubCableTrack",
-      "alternateName": "Global Submarine Cable Intelligence Console",
-      "description": "Global submarine cable intelligence: cable dossiers, documented incident record, chokepoint risk analysis, live infrastructure feed and route lookup.",
+      "alternateName": "Global Submarine Cable Monitor",
+      "description": "A monitoring console for global submarine cable routes: cable dossiers, documented incident record, chokepoint risk analysis, live infrastructure feed and route lookup.",
       "inLanguage": "en",
       "license": "https://creativecommons.org/licenses/by/4.0/"
     },
@@ -48,11 +48,11 @@
 </head>
 <body>
 
-<h1 class="sr-only">SubCableTrack — global submarine cable intelligence console</h1>
+<h1 class="sr-only">SubCableTrack — global submarine cable monitoring console</h1>
 <noscript>
-  <div style="padding:40px;max-width:720px;margin:0 auto;font-family:system-ui,sans-serif;color:#e6f1f7;background:#060b12;line-height:1.7">
-    <h2 style="color:#22d3c8">SubCableTrack</h2>
-    <p>This console renders its globe and dossiers in the browser, so JavaScript is required for the interface. The underlying intelligence is still available without it:</p>
+  <div style="padding:40px;max-width:720px;margin:0 auto;font-family:system-ui,sans-serif;color:#ecf5f1;background:#071a1f;line-height:1.7">
+    <h2 style="color:#3fb5a6">SubCableTrack</h2>
+    <p>This console renders its globe and dossiers in the browser, so JavaScript is required for the interface. The underlying data is still available without it:</p>
     <ul>
       <li><a style="color:#4a9eff" href="api/cables.json">Cable index (JSON)</a></li>
       <li><a style="color:#4a9eff" href="api/feed.json">Cable-relevant feed items (JSON)</a></li>
@@ -70,20 +70,26 @@
     <svg class="tb-logo" viewBox="0 0 32 32" fill="none">
       <defs>
         <radialGradient id="lgo" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stop-color="#5ff0e4" stop-opacity=".9"/>
-          <stop offset="60%" stop-color="#22d3c8" stop-opacity=".7"/>
-          <stop offset="100%" stop-color="#0b6e68" stop-opacity=".4"/>
+          <stop offset="0%" stop-color="#7fd9cc" stop-opacity=".85"/>
+          <stop offset="60%" stop-color="#3fb5a6" stop-opacity=".6"/>
+          <stop offset="100%" stop-color="#0f5c53" stop-opacity=".35"/>
         </radialGradient>
       </defs>
-      <circle cx="16" cy="16" r="13" fill="url(#lgo)" opacity=".2"/>
-      <circle cx="16" cy="16" r="11" fill="none" stroke="currentColor" stroke-width="1" opacity=".55"/>
-      <ellipse cx="16" cy="16" rx="5.5" ry="11" fill="none" stroke="currentColor" stroke-width="1" opacity=".4"/>
-      <path d="M4 18c3-3 6 3 9 0s6 3 9 0" stroke="#22d3c8" stroke-width="1.3" fill="none" opacity=".9"/>
-      <circle cx="16" cy="16" r="2.4" fill="#22d3c8" opacity=".95"/>
+      <circle cx="16" cy="16" r="13.5" fill="url(#lgo)" opacity=".22"/>
+      <circle cx="16" cy="16" r="12.5" fill="none" stroke="currentColor" stroke-width=".8" opacity=".5"/>
+      <g stroke="currentColor" stroke-width="1" opacity=".55">
+        <line x1="16" y1="2.5" x2="16" y2="7"/>
+        <line x1="16" y1="25" x2="16" y2="29.5"/>
+        <line x1="2.5" y1="16" x2="7" y2="16"/>
+        <line x1="25" y1="16" x2="29.5" y2="16"/>
+      </g>
+      <path d="M16 6 19 16 16 26 13 16 Z" fill="#d9b36a" opacity=".92"/>
+      <path d="M16 6 13 16 16 26" fill="#3fb5a6" opacity=".92"/>
+      <circle cx="16" cy="16" r="1.8" fill="#ecf5f1"/>
     </svg>
     <div class="tb-brand-text">
       <div class="tb-name">SubCable<span>Track</span></div>
-      <div class="tb-desc">Global Submarine Cable Intelligence</div>
+      <div class="tb-desc">Global Submarine Cable Monitor</div>
     </div>
   </div>
 
@@ -92,16 +98,16 @@
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><ellipse cx="12" cy="12" rx="4" ry="10"/><line x1="2" y1="12" x2="22" y2="12"/></svg><span>Globe</span>
     </a>
     <a class="tab" data-view="registry" href="/registry" role="tab" aria-selected="false">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="5" r="2.5"/><circle cx="19" cy="19" r="2.5"/><circle cx="5" cy="19" r="2.5"/><path d="M12 8v3m-5.2 5.2 3.7-2.2M16.5 14l-3.5-3"/></svg><span>Registry</span>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 3.5h11a2 2 0 0 1 2 2V21l-7.5-3.5L5 21V5.5a2 2 0 0 1 0-2z"/><line x1="8" y1="8" x2="15" y2="8"/><line x1="8" y1="11.5" x2="15" y2="11.5"/></svg><span>Registry</span>
     </a>
     <a class="tab" data-view="landscape" href="/landscape" role="tab" aria-selected="false">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg><span>Landscape</span>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 17c1.8-1.6 3.6-1.6 5.4 0s3.6 1.6 5.4 0 3.6-1.6 5.4 0 3.6 1.6 5.4 0"/><path d="M2 12c1.8-1.6 3.6-1.6 5.4 0s3.6 1.6 5.4 0 3.6-1.6 5.4 0 3.6 1.6 5.4 0"/><circle cx="12" cy="5" r="2"/></svg><span>Overview</span>
     </a>
     <a class="tab" data-view="feed" href="/feed" role="tab" aria-selected="false">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1.2"/></svg><span>Feed</span>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 3v18"/><path d="M5 4h12l-3 3.5L17 11H5"/></svg><span>Feed</span>
     </a>
     <a class="tab" data-view="resilience" href="/resilience" role="tab" aria-selected="false">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2 2 7v6c0 5 4 8 10 9 6-1 10-4 10-9V7z"/></svg><span>Resilience</span>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9.5"/><circle cx="12" cy="12" r="3.5"/><line x1="12" y1="2.5" x2="12" y2="8.5"/><line x1="12" y1="15.5" x2="12" y2="21.5"/><line x1="2.5" y1="12" x2="8.5" y2="12"/><line x1="15.5" y1="12" x2="21.5" y2="12"/></svg><span>Resilience</span>
     </a>
     <a class="tab" data-view="route" href="/route" role="tab" aria-selected="false">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="5" cy="6" r="2.4"/><circle cx="19" cy="18" r="2.4"/><path d="M7 7.5c3 2 7 6 10 9"/></svg><span>Route</span>
@@ -150,7 +156,7 @@
     </div>
     <div class="sb-author">
       <div class="sb-sec-title">About</div>
-      <div class="sb-author-meta">Built and maintained by <strong>Akram Hosen Sakib</strong> &middot; global submarine cable intelligence console &middot; compiled from consortium announcements, regulator filings, Internet Society / Cloudflare Radar / APNIC reporting and press coverage &mdash; cited per dossier &middot; not affiliated with any cable operator or TeleGeography.</div>
+      <div class="sb-author-meta">Built and maintained by <strong>Akram Hosen Sakib</strong> &middot; global submarine cable monitoring console &middot; compiled from consortium announcements, regulator filings, Internet Society / Cloudflare Radar / APNIC reporting and press coverage &mdash; cited per dossier &middot; not affiliated with any cable operator or TeleGeography.</div>
       <div class="sb-author-links">
         <a href="https://github.com/akramsakib/subcablestrack" target="_blank" rel="noopener">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2.1c-3.3.7-4-1.4-4-1.4-.6-1.4-1.4-1.8-1.4-1.8-1.1-.8.1-.7.1-.7 1.2.1 1.9 1.3 1.9 1.3 1.1 1.8 2.9 1.3 3.6 1 .1-.8.4-1.3.8-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.7 1.7.3 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .3"/></svg>
@@ -166,7 +172,7 @@
         <a href="https://www.internetsociety.org/" target="_blank" rel="noopener">Internet Society</a>
         <a href="api/cables.json" target="_blank" rel="noopener">Cable index (JSON)</a>
       </div>
-      <div class="sb-author-copy">&copy; 2026 SubCableTrack &middot; CC-BY-4.0 &middot; Design language adapted from ThreatNexus by Awais Munir &middot; Landing points are a representative subset per system, not exhaustive — corroborate against primary sources before acting.</div>
+      <div class="sb-author-copy">&copy; 2026 SubCableTrack &middot; CC-BY-4.0 &middot; Landing points are a representative subset per system, not exhaustive — corroborate against primary sources before acting.</div>
     </div>
   </aside>
   <div class="sb-overlay" id="sb-overlay"></div>
@@ -220,10 +226,10 @@
 
 <nav class="mob-tabs" id="mob-tabs">
   <a class="mob-tab on" data-view="globe" href="/globe"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><ellipse cx="12" cy="12" rx="4" ry="10"/><line x1="2" y1="12" x2="22" y2="12"/></svg>Globe</a>
-  <a class="mob-tab" data-view="registry" href="/registry"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="5" r="2.5"/><circle cx="19" cy="19" r="2.5"/><circle cx="5" cy="19" r="2.5"/></svg>Registry</a>
-  <a class="mob-tab" data-view="landscape" href="/landscape"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>Landscape</a>
-  <a class="mob-tab" data-view="feed" href="/feed"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/></svg>Feed</a>
-  <a class="mob-tab" data-view="resilience" href="/resilience"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2 2 7v6c0 5 4 8 10 9 6-1 10-4 10-9V7z"/></svg>Resilience</a>
+  <a class="mob-tab" data-view="registry" href="/registry"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 3.5h11a2 2 0 0 1 2 2V21l-7.5-3.5L5 21V5.5a2 2 0 0 1 0-2z"/></svg>Registry</a>
+  <a class="mob-tab" data-view="landscape" href="/landscape"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 15c1.8-1.6 3.6-1.6 5.4 0s3.6 1.6 5.4 0 3.6-1.6 5.4 0 3.6 1.6 5.4 0"/><circle cx="12" cy="6" r="2"/></svg>Overview</a>
+  <a class="mob-tab" data-view="feed" href="/feed"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 3v18"/><path d="M5 4h12l-3 3.5L17 11H5"/></svg>Feed</a>
+  <a class="mob-tab" data-view="resilience" href="/resilience"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.3"/><line x1="12" y1="3" x2="12" y2="8.2"/><line x1="12" y1="15.8" x2="12" y2="21"/><line x1="3" y1="12" x2="8.2" y2="12"/><line x1="15.8" y1="12" x2="21" y2="12"/></svg>Resilience</a>
   <a class="mob-tab" data-view="route" href="/route"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="5" cy="6" r="2.4"/><circle cx="19" cy="18" r="2.4"/></svg>Route</a>
 </nav>
 

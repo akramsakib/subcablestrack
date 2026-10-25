@@ -1,7 +1,7 @@
 {
   "name": "subcablestrack",
   "version": "1.0.0",
-  "description": "Global submarine cable intelligence console — cable dossiers, documented incident record, chokepoint risk analysis, live infrastructure feed, route lookup and a cable relationship graph.",
+  "description": "A monitoring console for global submarine cable routes — cable dossiers, documented incident record, chokepoint risk analysis, live infrastructure feed, route lookup and a cable relationship graph.",
   "type": "module",
   "private": true,
   "license": "CC-BY-4.0",

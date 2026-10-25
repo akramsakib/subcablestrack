@@ -39,16 +39,16 @@ export function renderLandscape(cables, onSelect) {
   body.innerHTML = `
     <div class="cond-banner">
       <span class="blip"></span>
-      <b>WATCH</b>
+      <b>ADVISORY</b>
       <span>Seven cable-damage incidents have been recorded in the Baltic Sea alone since November 2024, and Taiwan Strait cables have now produced the industry's first criminal conviction for deliberate subsea sabotage \u2014 treat vessel-pattern anomalies near chokepoints as a live signal, not a historical curiosity.</span>
     </div>
 
     <div class="v-head">
-      <div class="v-title">Global Submarine Cable Landscape</div>
+      <div class="v-title">Network Overview</div>
       <div class="bluf">
         <div class="bluf-line">
-          <span class="bluf-tag">BLUF</span>
-          <span>Bottom line up front \u2014 derived from the corpus, not asserted.</span>
+          <span class="bluf-tag">AT A GLANCE</span>
+          <span>Key figures, counted from the corpus below \u2014 not asserted.</span>
         </div>
         <div class="bluf-grid">
           ${blufCells.map(([k, v, sub]) => `
