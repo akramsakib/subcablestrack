@@ -30,7 +30,7 @@ if (BASE && !BASE.startsWith('/')) BASE = '/' + BASE;
 const SITE = (process.env.SITE_URL || '').replace(/\/+$/, '');
 const HREF = (BASE || '') + '/';
 
-const COPY = ['css', 'js', 'data', 'vendor', 'assets'];
+const COPY = ['css', 'js', 'data'];
 const FILES = ['robots.txt', 'README.md', 'LICENSE'];
 
 const log = (...a) => console.log('  ', ...a);
@@ -110,11 +110,13 @@ async function main() {
     capabilities: { feed: 'snapshot', ai: false }
   }, null, 2));
 
-  const routes = ['', 'globe', 'registry', 'landscape', 'feed', 'resilience', 'route'];
+  /* Single scrolling page — one URL, with in-page anchors for the sections. */
+  const anchors = ['atlas', 'chokepoints', 'timeline', 'directory', 'watch', 'route'];
   const today = new Date().toISOString().slice(0, 10);
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${routes.map(r => `  <url><loc>${SITE}${HREF}${r}</loc><lastmod>${today}</lastmod><priority>${r ? '0.8' : '1.0'}</priority></url>`).join('\n')}
+  <url><loc>${SITE}${HREF}</loc><lastmod>${today}</lastmod><priority>1.0</priority></url>
+${anchors.map(a => `  <url><loc>${SITE}${HREF}#${a}</loc><lastmod>${today}</lastmod><priority>0.6</priority></url>`).join('\n')}
 </urlset>
 `;
   await fs.writeFile(path.join(DIST, 'sitemap.xml'), sitemap);

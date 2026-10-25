@@ -16,7 +16,9 @@ import { SOURCES, getFeed, cache } from './tools/feed.mjs';
 
 const ROOT = path.dirname(new URL(import.meta.url).pathname);
 const PORT = process.env.PORT || 3000;
-const ROUTES = ['/', '/globe', '/registry', '/cables', '/landscape', '/brief', '/feed', '/resilience', '/chokepoints', '/incidents', '/route', '/lookup'];
+/* Single scrolling page now — no view router. All in-page destinations are
+   anchors (#atlas, #chokepoints, #timeline, #directory, #watch, #route). */
+const ROUTES = ['/'];
 
 const MIME = {
   '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8',
@@ -56,7 +58,7 @@ async function serveStatic(req, res, pathname) {
     res.end(data);
   } catch {
     const idx = await fs.readFile(path.join(ROOT, 'index.html')).catch(() => null);
-    if (idx) { res.writeHead(200, { 'content-type': MIME['.html'] }); res.end(idx); }
+    if (idx) { res.writeHead(404, { 'content-type': MIME['.html'] }); res.end(idx); }
     else { res.writeHead(404).end('not found'); }
   }
 }

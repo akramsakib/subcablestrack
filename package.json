@@ -1,7 +1,7 @@
 {
   "name": "subcablestrack",
   "version": "1.0.0",
-  "description": "A monitoring console for global submarine cable routes — cable dossiers, documented incident record, chokepoint risk analysis, live infrastructure feed, route lookup and a cable relationship graph.",
+  "description": "An atlas of the cables that carry the internet — a scrolling, cited reference with a flat vector world map, 25 cable dossiers, a documented incident record since 2006, ranked chokepoint risk, a live cable-news watch and a point-to-point route lookup.",
   "type": "module",
   "private": true,
   "license": "CC-BY-4.0",
@@ -25,6 +25,7 @@
     "internet-infrastructure",
     "resilience",
     "chokepoint",
+    "atlas",
     "osint"
   ],
   "homepage": "https://akramsakib.github.io/subcablestrack/",

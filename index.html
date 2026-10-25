@@ -3,21 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#071a1f">
-<title>SubCableTrack — Global Submarine Cable Monitor</title>
-<meta name="description" content="A global monitoring console for submarine cable routes and infrastructure. 25+ cited cable dossiers, a documented incident record from 2006, chokepoint risk analysis, a live infrastructure-news feed, a route lookup and a cable relationship graph. Free, no login. Not a reproduction of TeleGeography's proprietary map data.">
-<link rel="stylesheet" href="css/style.css">
-<link rel="stylesheet" href="css/views.css">
-<script type="importmap">
-{ "imports": { "three": "./vendor/three.module.min.js", "three/addons/": "./vendor/three-addons/" }}
-</script>
-<link rel="modulepreload" href="vendor/three.module.min.js">
+<meta name="theme-color" content="#f3eee1">
+<title>SubCableTrack — an atlas of the cables that carry the internet</title>
+<meta name="description" content="A plain-vector atlas of the submarine cable network: 25+ cited cable dossiers, a documented incident record from 2006, ranked chokepoint risk, a live cable-news watch and a point-to-point route lookup. Free, no login. Not a reproduction of TeleGeography's proprietary map data.">
+<link rel="stylesheet" href="css/app.css">
 <link rel="modulepreload" href="data/cables.js">
-<link rel="modulepreload" href="js/globe.js">
+<link rel="modulepreload" href="js/map.js">
 
 <meta property="og:type" content="website">
-<meta property="og:title" content="SubCableTrack — Global Submarine Cable Monitor">
-<meta property="og:description" content="Watch where the world's internet infrastructure physically runs: 25+ cited cable dossiers, a documented incident record from 2006, chokepoint risk analysis, a live infrastructure feed and a route lookup. Free, no login.">
+<meta property="og:title" content="SubCableTrack — an atlas of the cables that carry the internet">
+<meta property="og:description" content="25+ cited cable dossiers, a documented incident record from 2006, ranked chokepoint risk, a live cable-news watch and a route lookup. Free, no login.">
 <meta name="robots" content="index, follow">
 
 <script type="application/ld+json">
@@ -28,19 +23,15 @@
       "@type": "WebSite",
       "@id": "#site",
       "name": "SubCableTrack",
-      "alternateName": "Global Submarine Cable Monitor",
-      "description": "A monitoring console for global submarine cable routes: cable dossiers, documented incident record, chokepoint risk analysis, live infrastructure feed and route lookup.",
+      "alternateName": "An atlas of the submarine cable network",
+      "description": "A cited reference atlas of global submarine cables: dossiers, documented incident record, chokepoint risk ranking, live cable-news watch and route lookup.",
       "inLanguage": "en",
       "license": "https://creativecommons.org/licenses/by/4.0/"
     },
     {
-      "@type": "Dataset",
-      "name": "Submarine cable registry",
-      "description": "Curated, publicly-sourced dossiers covering major submarine cable systems, their owners, landing points, capacity and documented incident history.",
-      "keywords": ["submarine cable", "subsea cable", "internet infrastructure", "cable landing", "chokepoint", "resilience"],
-      "spatialCoverage": { "@type": "Place", "name": "Global" },
-      "license": "https://creativecommons.org/licenses/by/4.0/",
-      "isAccessibleForFree": true
+      "@type": "Person",
+      "name": "Akram Hosen Sakib",
+      "url": "https://github.com/akramsakib"
     }
   ]
 }
@@ -48,207 +39,192 @@
 </head>
 <body>
 
-<h1 class="sr-only">SubCableTrack — global submarine cable monitoring console</h1>
+<h1 class="sr-only">SubCableTrack — an atlas of the cables that carry the internet</h1>
 <noscript>
-  <div style="padding:40px;max-width:720px;margin:0 auto;font-family:system-ui,sans-serif;color:#ecf5f1;background:#071a1f;line-height:1.7">
-    <h2 style="color:#3fb5a6">SubCableTrack</h2>
-    <p>This console renders its globe and dossiers in the browser, so JavaScript is required for the interface. The underlying data is still available without it:</p>
+  <div style="padding:40px;max-width:720px;margin:0 auto;font-family:system-ui,sans-serif;color:#1c2b2a;background:#f3eee1;line-height:1.7">
+    <h2>SubCableTrack</h2>
+    <p>This atlas renders its map and tables in the browser, so JavaScript is required. The underlying data is still available without it:</p>
     <ul>
-      <li><a style="color:#4a9eff" href="api/cables.json">Cable index (JSON)</a></li>
-      <li><a style="color:#4a9eff" href="api/feed.json">Cable-relevant feed items (JSON)</a></li>
-      <li><a style="color:#4a9eff" href="https://www.submarinecablemap.com/">TeleGeography's Submarine Cable Map</a> — the authoritative interactive reference</li>
+      <li><a href="api/cables.json">Cable index (JSON)</a></li>
+      <li><a href="api/incidents.json">Incident record (JSON)</a></li>
+      <li><a href="api/feed.json">Cable-relevant news feed (JSON)</a></li>
+      <li><a href="https://www.submarinecablemap.com/">TeleGeography's Submarine Cable Map</a> — the authoritative interactive reference</li>
     </ul>
   </div>
 </noscript>
 
-<header class="topbar">
-  <button class="icon-btn mob-menu-btn" id="mob-menu-btn" aria-label="Menu">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-  </button>
-
-  <div class="tb-brand" id="tb-brand" title="Return to globe">
-    <svg class="tb-logo" viewBox="0 0 32 32" fill="none">
-      <defs>
-        <radialGradient id="lgo" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stop-color="#7fd9cc" stop-opacity=".85"/>
-          <stop offset="60%" stop-color="#3fb5a6" stop-opacity=".6"/>
-          <stop offset="100%" stop-color="#0f5c53" stop-opacity=".35"/>
-        </radialGradient>
-      </defs>
-      <circle cx="16" cy="16" r="13.5" fill="url(#lgo)" opacity=".22"/>
+<header class="site-head">
+  <a class="brand" href="#top">
+    <svg class="brand-mark" viewBox="0 0 32 32" fill="none">
       <circle cx="16" cy="16" r="12.5" fill="none" stroke="currentColor" stroke-width=".8" opacity=".5"/>
       <g stroke="currentColor" stroke-width="1" opacity=".55">
-        <line x1="16" y1="2.5" x2="16" y2="7"/>
-        <line x1="16" y1="25" x2="16" y2="29.5"/>
-        <line x1="2.5" y1="16" x2="7" y2="16"/>
-        <line x1="25" y1="16" x2="29.5" y2="16"/>
+        <line x1="16" y1="2.5" x2="16" y2="7"/><line x1="16" y1="25" x2="16" y2="29.5"/>
+        <line x1="2.5" y1="16" x2="7" y2="16"/><line x1="25" y1="16" x2="29.5" y2="16"/>
       </g>
-      <path d="M16 6 19 16 16 26 13 16 Z" fill="#d9b36a" opacity=".92"/>
-      <path d="M16 6 13 16 16 26" fill="#3fb5a6" opacity=".92"/>
-      <circle cx="16" cy="16" r="1.8" fill="#ecf5f1"/>
+      <path d="M16 6 19 16 16 26 13 16 Z" fill="#a0702c" opacity=".92"/>
+      <path d="M16 6 13 16 16 26" fill="currentColor" opacity=".92"/>
+      <circle cx="16" cy="16" r="1.8" fill="currentColor"/>
     </svg>
-    <div class="tb-brand-text">
-      <div class="tb-name">SubCable<span>Track</span></div>
-      <div class="tb-desc">Global Submarine Cable Monitor</div>
-    </div>
-  </div>
-
-  <nav class="tabs" id="main-tabs" role="tablist">
-    <a class="tab on" data-view="globe" href="/globe" role="tab" aria-selected="true">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><ellipse cx="12" cy="12" rx="4" ry="10"/><line x1="2" y1="12" x2="22" y2="12"/></svg><span>Globe</span>
-    </a>
-    <a class="tab" data-view="registry" href="/registry" role="tab" aria-selected="false">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 3.5h11a2 2 0 0 1 2 2V21l-7.5-3.5L5 21V5.5a2 2 0 0 1 0-2z"/><line x1="8" y1="8" x2="15" y2="8"/><line x1="8" y1="11.5" x2="15" y2="11.5"/></svg><span>Registry</span>
-    </a>
-    <a class="tab" data-view="landscape" href="/landscape" role="tab" aria-selected="false">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 17c1.8-1.6 3.6-1.6 5.4 0s3.6 1.6 5.4 0 3.6-1.6 5.4 0 3.6 1.6 5.4 0"/><path d="M2 12c1.8-1.6 3.6-1.6 5.4 0s3.6 1.6 5.4 0 3.6-1.6 5.4 0 3.6 1.6 5.4 0"/><circle cx="12" cy="5" r="2"/></svg><span>Overview</span>
-    </a>
-    <a class="tab" data-view="feed" href="/feed" role="tab" aria-selected="false">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 3v18"/><path d="M5 4h12l-3 3.5L17 11H5"/></svg><span>Feed</span>
-    </a>
-    <a class="tab" data-view="resilience" href="/resilience" role="tab" aria-selected="false">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9.5"/><circle cx="12" cy="12" r="3.5"/><line x1="12" y1="2.5" x2="12" y2="8.5"/><line x1="12" y1="15.5" x2="12" y2="21.5"/><line x1="2.5" y1="12" x2="8.5" y2="12"/><line x1="15.5" y1="12" x2="21.5" y2="12"/></svg><span>Resilience</span>
-    </a>
-    <a class="tab" data-view="route" href="/route" role="tab" aria-selected="false">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="5" cy="6" r="2.4"/><circle cx="19" cy="18" r="2.4"/><path d="M7 7.5c3 2 7 6 10 9"/></svg><span>Route</span>
-    </a>
+    <span>
+      <span class="brand-name">SubCableTrack</span>
+      <div class="brand-tag">An atlas of the cables</div>
+    </span>
+  </a>
+  <nav class="head-nav">
+    <a href="#atlas">Atlas</a>
+    <a href="#chokepoints">Chokepoints</a>
+    <a href="#timeline">Timeline</a>
+    <a href="#directory">Directory</a>
+    <a href="#watch">Watch</a>
+    <a href="#route">Route</a>
   </nav>
-
-  <div class="tb-spacer"></div>
-
-  <div class="tb-search">
-    <svg class="tb-search-ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
-    <input id="g-search" type="text" placeholder="Search cables, owners, landings…" autocomplete="off" aria-label="Search">
-    <span class="tb-search-hint" id="spotlight-hint" title="Spotlight search">⌘K</span>
-  </div>
-
-  <button class="icon-btn" id="theme-toggle" aria-label="Toggle theme" title="Toggle theme (T)">
-    <svg class="th-ico-moon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-    <svg class="th-ico-sun" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+  <button class="theme-btn" id="theme-btn" aria-label="Toggle theme">
+    <svg class="ico-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    <svg class="ico-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
   </button>
+  <button class="mob-nav-btn" id="mob-nav-btn" aria-label="Menu">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+  <div class="mob-nav-panel" id="mob-nav-panel">
+    <a href="#atlas">Atlas</a><a href="#chokepoints">Chokepoints</a><a href="#timeline">Timeline</a>
+    <a href="#directory">Directory</a><a href="#watch">Watch</a><a href="#route">Route</a>
+  </div>
 </header>
 
-<div class="body">
-  <aside class="sidebar" id="sidebar">
-    <div class="sb-sec">
-      <div class="sb-sec-title">Status <span id="filter-count" class="mono" style="color:var(--text4)"></span></div>
-      <div class="sb-chips" id="status-chips"></div>
-    </div>
-    <div class="sb-sec">
-      <div class="sb-sec-title">Region</div>
-      <div class="sb-chips" id="mot-chips"></div>
-    </div>
-    <div class="sb-sec">
-      <div class="sb-sec-title">Data Freshness</div>
-      <div id="freshness-key" class="edge-key"></div>
-    </div>
-    <div class="sb-sec" id="cluster-legend" style="display:none">
-      <div class="sb-sec-title">Edge Types</div>
-      <div class="edge-key">
-        <div class="ek-row"><div class="ek-line" style="background:#a87dff"></div>Shared owner</div>
-        <div class="ek-row"><div class="ek-line" style="background:#f0544f"></div>Shared landing country</div>
-        <div class="ek-row"><div class="ek-line" style="background:#4a9eff"></div>Same region</div>
-      </div>
-    </div>
-    <div class="sb-sec" id="arc-sec">
-      <div class="sb-sec-title">Globe display</div>
-      <button class="sb-link-btn" id="arc-toggle">Hide cable arcs</button>
-    </div>
-    <div class="sb-author">
-      <div class="sb-sec-title">About</div>
-      <div class="sb-author-meta">Built and maintained by <strong>Akram Hosen Sakib</strong> &middot; global submarine cable monitoring console &middot; compiled from consortium announcements, regulator filings, Internet Society / Cloudflare Radar / APNIC reporting and press coverage &mdash; cited per dossier &middot; not affiliated with any cable operator or TeleGeography.</div>
-      <div class="sb-author-links">
-        <a href="https://github.com/akramsakib/subcablestrack" target="_blank" rel="noopener">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2.1c-3.3.7-4-1.4-4-1.4-.6-1.4-1.4-1.8-1.4-1.8-1.1-.8.1-.7.1-.7 1.2.1 1.9 1.3 1.9 1.3 1.1 1.8 2.9 1.3 3.6 1 .1-.8.4-1.3.8-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.7 1.7.3 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .3"/></svg>
-          github.com/akramsakib
-        </a>
-        <a href="https://www.linkedin.com/in/akram-hosen-sakib-074532257" target="_blank" rel="noopener">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M20.4 20.5h-3.5v-5.6c0-1.3 0-3-1.9-3-1.8 0-2.1 1.4-2.1 2.9v5.7H9.4V9.2H13v1.6c.5-.9 1.7-1.9 3.5-1.9 3.7 0 4.4 2.4 4.4 5.6v6zM5.3 7.6a2 2 0 1 1 0-4 2 2 0 0 1 0 4zM7.1 20.5H3.6V9.2h3.5v11.3zM22.2 0H1.7C.8 0 0 .7 0 1.6v20.7c0 .9.7 1.7 1.7 1.7h20.6c.9 0 1.7-.7 1.7-1.7V1.6c0-.9-.8-1.6-1.8-1.6z"/></svg>
-          in/akram-hosen-sakib
-        </a>
-      </div>
-      <div class="sb-author-links" style="margin-top:7px;padding-top:7px;border-top:1px solid var(--border)">
-        <a href="https://www.submarinecablemap.com/" target="_blank" rel="noopener">TeleGeography Submarine Cable Map — go deeper</a>
-        <a href="https://www.internetsociety.org/" target="_blank" rel="noopener">Internet Society</a>
-        <a href="api/cables.json" target="_blank" rel="noopener">Cable index (JSON)</a>
-      </div>
-      <div class="sb-author-copy">&copy; 2026 SubCableTrack &middot; CC-BY-4.0 &middot; Landing points are a representative subset per system, not exhaustive — corroborate against primary sources before acting.</div>
-    </div>
-  </aside>
-  <div class="sb-overlay" id="sb-overlay"></div>
+<main id="top">
 
-  <div class="main">
-    <div class="view-panel on" data-view="globe" role="tabpanel" aria-label="Globe view">
-      <div class="globe-wrap">
-        <div id="globe-loading"><div class="boot-card"><div class="spin"></div><div class="load-txt">Loading cable network…</div></div></div>
-        <canvas id="globe-canvas"></canvas>
-        <div id="g-tooltip"></div>
+  <section class="hero" id="atlas">
+    <div class="hero-eyebrow"><span class="dot"></span>A cited reference atlas, not a live operational feed</div>
+    <h1>Where the <em>internet</em> actually runs.</h1>
+    <p class="hero-sub">About 99% of intercontinental data travels through roughly 600 submarine cables lying on the seabed. This atlas tracks a curated, fully-sourced subset of 25 major systems — their routes, their owners, every documented cut since 2006, and the narrow geographic corridors where a disproportionate share of that traffic converges.</p>
+    <div class="hero-stats" id="hero-stats"></div>
+  </section>
 
-        <div class="globe-hero" id="globe-hero"></div>
-        <div class="globe-legend" id="globe-legend"></div>
-
-        <div class="globe-timeline" id="globe-timeline">
-          <div class="gt-head">
-            <button class="gt-play" id="gt-play" title="Play through the incident record">▶</button>
-            <span class="gt-title">INCIDENT RECORD</span>
-            <span class="gt-year mono" id="gt-year">ALL YEARS</span>
-            <button class="gt-reset" id="gt-reset">reset</button>
-          </div>
-          <div class="gt-bars" id="gt-bars"></div>
-        </div>
-        <div class="globe-hint">
-          <span class="gh-row"><span class="gh-key">DRAG</span>rotate</span>
-          <span class="gh-row"><span class="gh-key">SCROLL</span>zoom</span>
-          <span class="gh-row"><span class="gh-key">CLICK</span>marker</span>
-        </div>
+  <div class="atlas-frame">
+    <div class="atlas-toolbar" id="atlas-chips">
+      <span class="atlas-spacer"></span>
+      <span class="atlas-hint">Click a route for its dossier · drag to pan · scroll to zoom</span>
+    </div>
+    <div class="map-card">
+      <svg id="world-map"></svg>
+      <div class="map-tip" id="map-tip"></div>
+      <div class="map-legend" id="map-legend"></div>
+      <div class="map-zoom">
+        <button id="map-zoom-in" aria-label="Zoom in">+</button>
+        <button id="map-zoom-out" aria-label="Zoom out">−</button>
+        <button id="map-zoom-reset" aria-label="Reset view" style="font-size:10px">⟲</button>
       </div>
     </div>
-    <div class="view-panel" data-view="registry" id="registry-view" role="tabpanel" aria-label="registry view"></div>
-    <div class="view-panel" data-view="landscape" id="landscape-view" role="tabpanel" aria-label="landscape view"><div class="scroll-wrap" id="landscape-body"></div></div>
-    <div class="view-panel" data-view="feed" id="feed-view" role="tabpanel" aria-label="feed view"><div class="scroll-wrap" id="feed-body"></div></div>
-    <div class="view-panel" data-view="resilience" id="resilience-view" role="tabpanel" aria-label="resilience view"><div class="scroll-wrap" id="resilience-body"></div></div>
-    <div class="view-panel" data-view="route" id="route-view" role="tabpanel" aria-label="route view"><div class="scroll-wrap" id="route-body"></div></div>
+    <div class="atlas-foot">Routes are drawn between each system's documented landing points as gently-bowed lines, not a projection of the real seabed path — landing points are a representative subset per system, not exhaustive. Land outline: Natural Earth 110m via world-atlas (public domain).</div>
   </div>
 
-  <aside class="detail" id="detail" aria-label="Cable dossier">
-    <div class="dp-head">
-      <div>
-        <div class="dp-name" id="dp-name"></div>
-        <div class="dp-sub" id="dp-sub"></div>
-      </div>
-      <button class="dp-close" id="dp-close" aria-label="Close dossier">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 6 6 18M6 6l12 12"/></svg>
-      </button>
+  <section class="section" id="chokepoints">
+    <div class="section-head">
+      <div class="section-eyebrow">Risk corridors</div>
+      <h2>Chokepoints</h2>
+      <p>Narrow corridors where cable systems physically converge, so a small-area incident has an outsized blast radius. Ranges are cited from public analysis, not a single authoritative count — different trade sources count cables differently, so a range is shown honestly instead of a falsely precise figure.</p>
     </div>
-    <div class="dp-body" id="dp-body"></div>
-  </aside>
-</div>
+    <div class="choke-list" id="choke-list"></div>
+  </section>
 
-<nav class="mob-tabs" id="mob-tabs">
-  <a class="mob-tab on" data-view="globe" href="/globe"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><ellipse cx="12" cy="12" rx="4" ry="10"/><line x1="2" y1="12" x2="22" y2="12"/></svg>Globe</a>
-  <a class="mob-tab" data-view="registry" href="/registry"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 3.5h11a2 2 0 0 1 2 2V21l-7.5-3.5L5 21V5.5a2 2 0 0 1 0-2z"/></svg>Registry</a>
-  <a class="mob-tab" data-view="landscape" href="/landscape"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 15c1.8-1.6 3.6-1.6 5.4 0s3.6 1.6 5.4 0 3.6-1.6 5.4 0 3.6 1.6 5.4 0"/><circle cx="12" cy="6" r="2"/></svg>Overview</a>
-  <a class="mob-tab" data-view="feed" href="/feed"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 3v18"/><path d="M5 4h12l-3 3.5L17 11H5"/></svg>Feed</a>
-  <a class="mob-tab" data-view="resilience" href="/resilience"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.3"/><line x1="12" y1="3" x2="12" y2="8.2"/><line x1="12" y1="15.8" x2="12" y2="21"/><line x1="3" y1="12" x2="8.2" y2="12"/><line x1="15.8" y1="12" x2="21" y2="12"/></svg>Resilience</a>
-  <a class="mob-tab" data-view="route" href="/route"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="5" cy="6" r="2.4"/><circle cx="19" cy="18" r="2.4"/></svg>Route</a>
-</nav>
+  <section class="section" id="timeline">
+    <div class="section-head">
+      <div class="section-eyebrow">2006 → present</div>
+      <h2>Incident record</h2>
+      <p>Every entry is a real, publicly reported cut, fault or act of sabotage with named sources. Cause is stated at the confidence level the sources themselves used — this record does not upgrade a suspicion to a fact.</p>
+    </div>
+    <div class="timeline-wrap"><div class="timeline-rail" id="timeline-rail"></div></div>
+    <div class="timeline-detail" id="timeline-detail"></div>
+  </section>
 
-<div class="spotlight-overlay" id="spotlight-overlay" role="dialog" aria-modal="true" aria-label="Search">
-  <div class="spotlight-box">
-    <div class="spotlight-input-wrap">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
-      <input type="text" id="spotlight-input" class="spotlight-input" placeholder="Search cables, owners, landings…" autocomplete="off">
-      <span class="spotlight-esc">ESC</span>
+  <section class="section" id="directory">
+    <div class="section-head">
+      <div class="section-eyebrow">25 systems</div>
+      <h2>Cable directory</h2>
+      <p>Search, filter and sort the full registry. Open a row for ownership, landing points, related systems and primary sources.</p>
     </div>
-    <div class="spotlight-results" id="spotlight-results">
-      <div class="spotlight-empty">Start typing to search the cable registry…</div>
+    <div class="dir-toolbar">
+      <input class="dir-search" id="dir-search" type="search" placeholder="Search by name or owner…">
+      <select class="dir-select" id="dir-status"></select>
+      <select class="dir-select" id="dir-region"></select>
+      <span class="dir-count" id="dir-count"></span>
     </div>
-    <div class="spotlight-footer"><span>↑↓ navigate</span><span>↵ open</span><span>ESC close</span></div>
+    <div class="dir-table-wrap">
+      <table class="dir-table">
+        <thead><tr>
+          <th data-key="name">System</th>
+          <th data-key="region">Region</th>
+          <th data-key="length_km">Length</th>
+          <th data-key="rfs">RFS</th>
+          <th data-key="status">Status</th>
+          <th data-key="owners">Owners</th>
+        </tr></thead>
+        <tbody id="dir-tbody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="section" id="watch">
+    <div class="section-head">
+      <div class="section-eyebrow">Live</div>
+      <h2>Cable watch</h2>
+      <p>Submarine-cable trade press, networking outlets and general tech/security reporting, monitored for cable relevance and refreshed every 15 minutes.</p>
+    </div>
+    <div class="watch-stats" id="watch-stats"></div>
+    <div class="watch-toolbar" id="watch-tabs">
+      <button class="watch-tab on" data-f="cable">Cable-relevant</button>
+      <button class="watch-tab" data-f="all">All sources</button>
+    </div>
+    <div class="watch-list" id="watch-list"></div>
+  </section>
+
+  <section class="section" id="route">
+    <div class="section-head">
+      <div class="section-eyebrow">Wayfinder</div>
+      <h2>Plan a route</h2>
+      <p>Enter two landing points to find which tracked cables connect them, and which chokepoints a path between them is likely to cross.</p>
+    </div>
+    <div class="route-form">
+      <input class="route-input" id="route-from" placeholder="From — e.g. Marseille">
+      <input class="route-input" id="route-to" placeholder="To — e.g. Mumbai">
+      <button class="route-btn" id="route-go">Find routes →</button>
+    </div>
+    <div class="route-examples">
+      <span class="route-ex" data-a="Marseille" data-b="Mumbai">Marseille → Mumbai</span>
+      <span class="route-ex" data-a="Chennai" data-b="Djibouti City">Chennai → Djibouti City</span>
+      <span class="route-ex" data-a="Singapore" data-b="Los Angeles">Singapore → Los Angeles</span>
+      <span class="route-ex" data-a="Lagos" data-b="Lisbon">Lagos → Lisbon</span>
+      <span class="route-ex" data-a="Helsinki" data-b="Tallinn">Helsinki → Tallinn</span>
+      <span class="route-ex" data-a="Keelung" data-b="Matsu">Keelung → Matsu</span>
+    </div>
+    <div id="route-out"></div>
+  </section>
+
+</main>
+
+<footer class="site-foot">
+  <div class="foot-in">
+    <div>
+      <div class="brand-name" style="margin-bottom:10px">SubCableTrack</div>
+      <div class="foot-about">Built and maintained by <strong>Akram Hosen Sakib</strong> — an independent atlas compiled from consortium announcements, regulator filings, Internet Society / Cloudflare Radar / APNIC reporting and press coverage, cited per dossier. Not affiliated with any cable operator or TeleGeography. Land outline from Natural Earth via <a href="https://github.com/topojson/world-atlas" target="_blank" rel="noopener">world-atlas</a> (public domain).</div>
+    </div>
+    <div class="foot-col">
+      <h4>Go deeper</h4>
+      <a href="https://www.submarinecablemap.com/" target="_blank" rel="noopener">TeleGeography Submarine Cable Map</a>
+      <a href="https://www.internetsociety.org/" target="_blank" rel="noopener">Internet Society</a>
+      <a href="https://radar.cloudflare.com/" target="_blank" rel="noopener">Cloudflare Radar</a>
+      <a href="https://www.iscpc.org/" target="_blank" rel="noopener">International Cable Protection Committee</a>
+    </div>
+    <div class="foot-col">
+      <h4>Project</h4>
+      <a href="https://github.com/akramsakib/subcablestrack" target="_blank" rel="noopener">github.com/akramsakib</a>
+      <a href="https://www.linkedin.com/in/akram-hosen-sakib-074532257" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="api/cables.json">Raw cable data (JSON)</a>
+    </div>
   </div>
-</div>
+  <div class="foot-legal">&copy; 2026 SubCableTrack &middot; CC BY 4.0 for the data, MIT for the code &middot; Landing points are a representative subset per system, not exhaustive — corroborate against primary sources before acting.</div>
+</footer>
 
-<div class="toast" id="toast"></div>
-
-<script type="module" src="js/app.js"></script>
+<script type="module" src="js/main.js"></script>
 </body>
 </html>
