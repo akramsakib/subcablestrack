@@ -1,0 +1,110 @@
+name: Build and deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  # Re-aggregate the feed every 15 minutes. GitHub's documented floor is 5
+  # minutes, but scheduled runs are queued best-effort and get delayed or
+  # dropped under load, so 15 is the shortest interval that is actually
+  # reliable. The sources themselves publish roughly once an hour.
+  schedule:
+    - cron: '*/15 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Configure Pages
+        id: pages
+        uses: actions/configure-pages@v5
+
+      - name: Build static site
+        env:
+          BASE_PATH: ${{ steps.pages.outputs.base_path }}
+          SITE_URL: ${{ steps.pages.outputs.origin }}
+        run: node tools/build.mjs
+
+      - name: Skip deploy when the feed has not changed
+        id: changed
+        if: github.event_name == 'schedule'
+        env:
+          SITE_URL: ${{ steps.pages.outputs.origin }}
+          BASE_PATH: ${{ steps.pages.outputs.base_path }}
+        run: |
+          set -uo pipefail
+          new_hash=$(node -e "
+            const f = require('./dist/api/feed.json');
+            const ids = (f.items || []).map(i => i.id || i.url || i.title).sort().join('\n');
+            console.log(require('crypto').createHash('sha256').update(ids).digest('hex'));
+          ")
+          live_url="${SITE_URL}${BASE_PATH}/api/feed.json"
+          if curl -fsSL --max-time 30 "$live_url" -o /tmp/live-feed.json; then
+            old_hash=$(node -e "
+              const f = require('/tmp/live-feed.json');
+              const ids = (f.items || []).map(i => i.id || i.url || i.title).sort().join('\n');
+              console.log(require('crypto').createHash('sha256').update(ids).digest('hex'));
+            " 2>/dev/null || echo 'unreadable')
+          else
+            echo "could not fetch $live_url - treating as changed"
+            old_hash='unreachable'
+          fi
+          echo "live: $old_hash"
+          echo "built: $new_hash"
+          if [ "$old_hash" = "$new_hash" ]; then
+            echo 'No new feed items - skipping deploy.'
+            echo 'skip=true' >> "$GITHUB_OUTPUT"
+          else
+            echo 'Feed changed - continuing to deploy.'
+            echo 'skip=false' >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Verify build output
+        if: steps.changed.outputs.skip != 'true'
+        run: |
+          set -e
+          test -f dist/index.html
+          test -f dist/404.html
+          test -f dist/api/cables.json
+          test -f dist/api/incidents.json
+          test -f dist/api/feed.json
+          cables=$(node -e "console.log(require('./dist/api/cables.json').count)")
+          incidents=$(node -e "console.log(require('./dist/api/incidents.json').count)")
+          items=$(node -e "console.log(require('./dist/api/feed.json').total)")
+          echo "cables: $cables | incidents: $incidents | feed items: $items"
+          test "$cables" -ge 20
+          test "$incidents" -ge 5
+
+      - uses: actions/upload-pages-artifact@v3
+        if: steps.changed.outputs.skip != 'true'
+        with:
+          path: dist
+
+    outputs:
+      skip: ${{ steps.changed.outputs.skip }}
+
+  deploy:
+    needs: build
+    if: needs.build.outputs.skip != 'true'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
